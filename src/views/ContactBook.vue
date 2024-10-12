@@ -9,7 +9,7 @@
                 <i class="fas fa-address-book"></i>
             </h4>
             <ContactList v-if="filteredContactsCount > 0" :contacts="filteredContacts"
-                v-model:activeIndex="activeIndex"/>
+                v-model:activeIndex="activeIndex" />
             <p v-else>Không có liên hệ nào.</p>
             <div class="mt-3 row justify-content-around align-items-center">
                 <button class="btn btn-sm btn-primary" @click="refreshList()">
@@ -30,13 +30,12 @@
                     <i class="fas fa-address-card"></i>
                 </h4>
                 <ContactCard :contact="activeContact" />
-                <router-link
-                    :to="{
-                        name: 'contact.edit',
-                        params: { id: activeContact._id },
-                    }">
-                            <span class="mt-2 badge badge-warning">
-                                <i class="fas fa-edit"></i> Hiệu chỉnh</span>
+                <router-link :to="{
+                    name: 'contact.edit',
+                    params: { id: activeContact._id },
+                }">
+                    <span class="mt-2 badge badge-warning">
+                        <i class="fas fa-edit"></i> Hiệu chỉnh</span>
                 </router-link>
             </div>
         </div>
@@ -47,7 +46,8 @@
 import ContactCard from "@/components/ContactCard.vue";
 import InputSearch from "@/components/InputSearch.vue";
 import ContactList from "@/components/ContactList.vue";
-import ContactService from "@/services/contact.service";
+import ContactService from "@/services/contact.service.js";
+
 export default {
     components: {
         ContactCard,
@@ -69,14 +69,14 @@ export default {
     computed: {
         contactStrings() {
             return this.contacts.map((contact) => {
-            const { name, email, address, phone } = contact;
-            return [name, email, address, phone].join("");
+                const { name, email, address, phone } = contact;
+                return [name, email, address, phone].join("");
             });
         },
         filteredContacts() {
             if (!this.searchText) return this.contacts;
             return this.contacts.filter((_contact, index) =>
-                    this.contactStrings[index].includes(this.searchText)
+                this.contactStrings[index].includes(this.searchText)
             );
         },
         activeContact() {
@@ -92,10 +92,10 @@ export default {
             try {
                 this.contacts = await ContactService.getAll();
             } catch (error) {
-                 console.log(error);
+                console.log(error);
             }
         },
-         refreshList() {
+        refreshList() {
             this.retrieveContacts();
             this.activeIndex = -1;
         },
@@ -116,11 +116,12 @@ export default {
     mounted() {
         this.refreshList();
     },
-};       
+};
 </script>
+
 <style scoped>
 .page {
-text-align: left;
-max-width: 750px;
+    text-align: left;
+    max-width: 750px;
 }
 </style>
